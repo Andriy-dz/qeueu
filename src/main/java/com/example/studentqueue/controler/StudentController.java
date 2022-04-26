@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -43,8 +44,8 @@ public class StudentController {
                 .collect(Collectors.toList());
     }
 
-    @PostMapping("/{name}")
-    public StudentResponse save(@PathVariable String name) {
+    @PostMapping
+    public StudentResponse save(@RequestParam String name) {
         Student newStudent = new Student();
         newStudent.setName(name);
         return mapper.mapToDto(service.add(newStudent));
