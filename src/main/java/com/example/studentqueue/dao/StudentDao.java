@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface StudentDao extends JpaRepository<Student, Long> {
     @Query(value = "SELECT MAX(s.numberInQueue) "
             + "FROM Student s ")
-    Integer getLastStudentInStack();
+    Integer getLastStudentInQueue();
 
     Student findByName(String studentName);
 
@@ -18,5 +18,5 @@ public interface StudentDao extends JpaRepository<Student, Long> {
     List<Student> findAllInQueue();
 
     @Query(value = "SELECT s FROM Student s WHERE s.numberInQueue > ?1")
-    List<Student> findAllByNumberInQueue(Integer number);
+    List<Student> findAllNextInQueue(Integer number);
 }

@@ -35,6 +35,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student update(Student student) {
+
         return studentDao.save(student);
     }
 
@@ -61,9 +62,9 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student addToQueue(Long id) {
         Student student = studentDao.getById(id);
-        Integer lastStudentInStack = studentDao.getLastStudentInStack();
+        Integer lastStudentInQueue = studentDao.getLastStudentInQueue();
         student.setNumberInQueue(
-                (lastStudentInStack == null) ? 1 : lastStudentInStack + 1);
+                (lastStudentInQueue == null) ? 1 : lastStudentInQueue + 1);
         return update(student);
     }
 
@@ -72,7 +73,7 @@ public class StudentServiceImpl implements StudentService {
     public void leaveFromQueue(Long id) throws Exception {
         Student student = get(id).orElseThrow(() ->
                 new Exception("Such a student does not exist with id " + id));
-        List<Student> students = getAllByNumberInQueue(student.getNumberInQueue());
+        List<Student> students = studentDao.findAllNextInQueue(student.getNumberInQueue());
         for(Student s : students) {
             s.setNumberInQueue(s.getNumberInQueue() - 1);
             update(s);
@@ -80,9 +81,4 @@ public class StudentServiceImpl implements StudentService {
         student.setNumberInQueue(null);
         update(student);
     }
-
-    private List<Student> getAllByNumberInQueue(Integer number) {
-        return studentDao.findAllByNumberInQueue(number);
-    }
-
 }
